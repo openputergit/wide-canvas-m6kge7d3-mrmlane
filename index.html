@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90s Retro React Playground</title>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-pink: #ff71ce;
+            --neon-blue: #01cdfe;
+            --neon-green: #05ffa1;
+            --neon-purple: #b967ff;
+        }
+
+        body {
+            background: #1a1a1a;
+            font-family: 'VT323', monospace;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .retro-grid {
+            background: linear-gradient(#000 1px, transparent 1px),
+                        linear-gradient(90deg, #000 1px, transparent 1px);
+            background-size: 30px 30px;
+            background-position: center center;
+            transform: perspective(500px) rotateX(60deg);
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            from { background-position: 0 0; }
+            to { background-position: 0 1000px; }
+        }
+
+        .neon-text {
+            text-shadow: 0 0 5px #fff,
+                         0 0 10px #fff,
+                         0 0 20px var(--neon-blue),
+                         0 0 30px var(--neon-blue),
+                         0 0 40px var(--neon-blue);
+            animation: neon-pulse 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neon-pulse {
+            from { text-shadow: 0 0 5px #fff,
+                               0 0 10px #fff,
+                               0 0 20px var(--neon-blue),
+                               0 0 30px var(--neon-blue),
+                               0 0 40px var(--neon-blue); }
+            to { text-shadow: 0 0 5px #fff,
+                             0 0 15px #fff,
+                             0 0 25px var(--neon-blue),
+                             0 0 35px var(--neon-blue),
+                             0 0 45px var(--neon-blue); }
+        }
+
+        .retro-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .retro-card:hover {
+            transform: translateY(-10px) rotateX(10deg) rotateY(10deg);
+        }
+
+        .scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.2) 0px,
+                rgba(0, 0, 0, 0.2) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const RetroCard = ({ icon, title, description }) => (
+            <div className="retro-card p-6 rounded-lg hover:shadow-2xl">
+                <i className={`bi bi-${icon} text-5xl text-[#05ffa1]`}></i>
+                <h3 className="text-2xl mt-4 font-['Press_Start_2P'] text-[#ff71ce]">{title}</h3>
+                <p className="mt-2 text-[#01cdfe]">{description}</p>
+            </div>
+        );
+
+        const App = () => {
+            const [hover, setHover] = React.useState(false);
+
+            return (
+                <div className="min-h-screen">
+                    <div className="retro-grid fixed inset-0 z-0"></div>
+                    
+                    <div className="relative z-10 container mx-auto px-4 py-12">
+                        <header className="text-center mb-16">
+                            <h1 className="text-4xl md:text-6xl font-['Press_Start_2P'] neon-text mb-4">
+                                RETRO WAVE
+                            </h1>
+                            <p className="text-2xl text-[#05ffa1]">Welcome to the Digital Dimension</p>
+                        </header>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <RetroCard 
+                                icon="cpu-fill" 
+                                title="CYBER" 
+                                description="Digital dreams come alive"
+                            />
+                            <RetroCard 
+                                icon="soundwave" 
+                                title="SYNTH" 
+                                description="Feel the retro beats"
+                            />
+                            <RetroCard 
+                                icon="lightning-charge-fill" 
+                                title="POWER" 
+                                description="Unlimited energy"
+                            />
+                        </div>
+
+                        <div className="mt-16 text-center">
+                            <button 
+                                className="bg-[#ff71ce] hover:bg-[#b967ff] text-white font-['Press_Start_2P'] py-4 px-8 rounded-lg transform transition-all duration-300 hover:scale-110"
+                                onMouseEnter={() => setHover(true)}
+                                onMouseLeave={() => setHover(false)}
+                            >
+                                {hover ? "LOADING..." : "ENTER"}
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="scanline"></div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
